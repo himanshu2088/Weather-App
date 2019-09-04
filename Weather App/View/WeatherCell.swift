@@ -13,10 +13,7 @@ class WeatherCell: UITableViewCell {
     //Outlets
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var tempLabel: UILabel!
-   
-    func configureCell(weather: Weather) {
-        self.cityLabel.text = weather.weatherCity
-        self.tempLabel.text = weather.weatherTemp
-    }
+    @IBOutlet weak var photo: UIImageView!
+    @IBOutlet weak var statusLabel: UILabel!
     
 }

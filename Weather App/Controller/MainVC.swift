@@ -10,16 +10,15 @@ import UIKit
 import CoreLocation
 import SwiftyJSON
 import Alamofire
-import CoreData
+import SVProgressHUD
 
-let appDelegate = UIApplication.shared.delegate as? AppDelegate
-
-class MainVC: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate {
+class MainVC: UIViewController, CLLocationManagerDelegate, ChangeCityDelegate {
+    
+    let realm = try! Realm()
 
     //Outlets
-    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-
+    
     //Variables
     let locationManager = CLLocationManager()
     
@@ -28,25 +27,20 @@ class MainVC: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate {
         
         tableView.delegate = self
         tableView.dataSource = self
-        searchBar.delegate = self
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
-        fetch()
         tableView.reloadData()
-        userEnteredANewCityName(city: "Delhi")
+        
+        let backgroundImage = UIImage(named: "background1")
+        let imageView = UIImageView(image: backgroundImage)
+        tableView.backgroundView = imageView
+        imageView.contentMode = .scaleAspectFill
+        
+        tableView.rowHeight = 100
         
         tableView.register(UINib(nibName: "WeatherCell", bundle: nil), forCellReuseIdentifier: "weatherCell")
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        if let locationString = searchBar.text, !locationString.isEmpty {
-            userEnteredANewCityName(city: locationString)
-            save()
-            fetch()
-        }
     }
     
     func userEnteredANewCityName(city: String) {
@@ -61,11 +55,21 @@ class MainVC: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate {
             if response.result.isSuccess {
                 
                 let weatherJSON : JSON = JSON(response.result.value!)
+                let error = weatherJSON["cod"].intValue
                 
-                weatherDataJSONArray.append(weatherJSON)
-                self.tableView.reloadData()
-                self.classifyData(json: weatherDataJSONArray)
+                if error == 404 {
+                    SVProgressHUD.dismiss()
+                    let alert = UIAlertController(title: "Error", message: "Entered city not found. Please write appropriate name.", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(action)
+                    self.present(alert, animated: true, completion: nil)
+                } else {
+                    weatherDataJSONArray.append(weatherJSON)
+                    self.tableView.reloadData()
+                    self.classifyData(json: weatherDataJSONArray)
+                }
             }
+                
             else {
                 print("Error \(String(describing: response.result.error))")
             }
@@ -78,8 +82,13 @@ class MainVC: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate {
         for data in json {
             let temperature = data["main"]["temp"].intValue - 273
             let city = data["name"].stringValue
+            let status = data["weather"][0]["main"].stringValue
             cityDataArray.append(city)
-            tempDataArray.append("\(temperature)")
+            tempDataArrayCelcius.append(temperature)
+            statusDataArray.append(status)
+            if let imageName = UIImage(named: status) {
+                photoDataArray.append(imageName)
+            }
         }
         tableView.reloadData()
     }
@@ -99,48 +108,10 @@ class MainVC: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate {
         }
     }
     
-    //Core Data Methods
-    
-    func save() {
-        
-        guard let managedContext = appDelegate?.persistentContainer.viewContext else { return }
-        let weather = Weather(context: managedContext)
-        
-        for data in cityDataArray {
-            weather.weatherCity = data
-        }
-        for data1 in tempDataArray {
-            weather.weatherTemp = data1
-        }
-        
-        do {
-            try managedContext.save()
-            print("Successfully saved data")
-        } catch {
-            debugPrint("Could not save: \(error.localizedDescription)")
-        }
-        
-    }
-
-    func remove(atIndexPath indexPath: IndexPath) {
-        guard let managedContext = appDelegate?.persistentContainer.viewContext else { return }
-        managedContext.delete(weatherDataArray[indexPath.row])
-        do {
-            try managedContext.save()
-            print("Successfully removed goal")
-        } catch {
-            debugPrint("Could not remove goal \(error.localizedDescription)")
-        }
-    }
-    
-    func fetch() {
-        guard let managedContext = appDelegate?.persistentContainer.viewContext else { return }
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Weather")
-        do {
-            weatherDataArray = try managedContext.fetch(fetchRequest) as! [Weather]
-            print("Successfully fetched Data")
-        } catch {
-            debugPrint("Could not fetch \(error.localizedDescription)")
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "changeCity" {
+            let destinationVC = segue.destination as! SearchCityVC
+            destinationVC.delegate = self
         }
     }
     
@@ -149,9 +120,11 @@ class MainVC: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate {
 extension MainVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        SVProgressHUD.dismiss()
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell") as? WeatherCell else { return UITableViewCell() }
-        let weather = weatherDataArray[indexPath.row]
-        cell.configureCell(weather: weather)
+        cell.cityLabel.text = cityDataArray[indexPath.row]
+        cell.statusLabel.text = statusDataArray[indexPath.row]
+        cell.tempLabel.text = "\(tempDataArrayCelcius[indexPath.row])"
         return cell
     }
     
@@ -160,26 +133,14 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return weatherDataArray.count
+        return cityDataArray.count
     }
     
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .none
-    }
-    
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let deleteAction = UITableViewRowAction(style: .destructive, title: "DELETE") { (rowAction, indexPath) in
-            self.remove(atIndexPath: indexPath)
-            self.fetch()
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            cityDataArray.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
         }
-        deleteAction.backgroundColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
-        
-        return [deleteAction]
     }
     
 }

@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--MainVC-->
+        <!--Weather App-->
         <scene sceneID="1T6-OY-ZjI">
             <objects>
                 <viewController id="tP7-XG-41T" customClass="MainVC" customModule="Weather_App" customModuleProvider="target" sceneMemberID="viewController">
@@ -18,48 +18,94 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="0fi-OR-ZRc">
-                                <rect key="frame" x="0.0" y="20" width="375" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="UkF-hj-3PU"/>
-                                </constraints>
-                                <textInputTraits key="textInputTraits"/>
-                            </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vYA-p4-8eI">
-                                <rect key="frame" x="0.0" y="70" width="375" height="597"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vYA-p4-8eI">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="4oa-Yc-a6A">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="100" id="4oa-Yc-a6A">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4oa-Yc-a6A" id="5vz-33-MFQ">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pRx-0l-Skj">
+                                <rect key="frame" x="162.5" y="607" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="iEV-HN-ya9"/>
+                                    <constraint firstAttribute="width" constant="50" id="zUI-IH-PEw"/>
+                                </constraints>
+                                <state key="normal" image="add"/>
+                                <connections>
+                                    <segue destination="9Vp-Sj-WqG" kind="show" identifier="changeCity" id="x44-no-m2L"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="0fi-OR-ZRc" firstAttribute="top" secondItem="qLc-81-jQe" secondAttribute="top" id="Aor-rK-Z1m"/>
-                            <constraint firstItem="vYA-p4-8eI" firstAttribute="top" secondItem="0fi-OR-ZRc" secondAttribute="bottom" id="FYS-2W-Txj"/>
-                            <constraint firstItem="0fi-OR-ZRc" firstAttribute="trailing" secondItem="qLc-81-jQe" secondAttribute="trailing" id="Pww-bQ-wec"/>
-                            <constraint firstItem="0fi-OR-ZRc" firstAttribute="leading" secondItem="qLc-81-jQe" secondAttribute="leading" id="cMe-jw-Jy5"/>
-                            <constraint firstItem="qLc-81-jQe" firstAttribute="trailing" secondItem="vYA-p4-8eI" secondAttribute="trailing" id="ePM-AY-zh2"/>
-                            <constraint firstItem="qLc-81-jQe" firstAttribute="bottom" secondItem="vYA-p4-8eI" secondAttribute="bottom" id="f3o-d6-NFl"/>
-                            <constraint firstItem="vYA-p4-8eI" firstAttribute="leading" secondItem="qLc-81-jQe" secondAttribute="leading" id="fwC-ap-fmW"/>
+                            <constraint firstItem="vYA-p4-8eI" firstAttribute="trailing" secondItem="qLc-81-jQe" secondAttribute="trailing" id="9up-XL-VIp"/>
+                            <constraint firstItem="vYA-p4-8eI" firstAttribute="leading" secondItem="qLc-81-jQe" secondAttribute="leading" id="JXo-Ew-jaN"/>
+                            <constraint firstItem="vYA-p4-8eI" firstAttribute="top" secondItem="Gkp-XM-CuR" secondAttribute="top" id="Sva-6N-pGq"/>
+                            <constraint firstItem="vYA-p4-8eI" firstAttribute="bottom" secondItem="qLc-81-jQe" secondAttribute="bottom" id="glJ-WI-mde"/>
+                            <constraint firstItem="qLc-81-jQe" firstAttribute="bottom" secondItem="pRx-0l-Skj" secondAttribute="bottom" constant="10" id="pqI-P6-u5h"/>
+                            <constraint firstItem="pRx-0l-Skj" firstAttribute="centerX" secondItem="Gkp-XM-CuR" secondAttribute="centerX" id="sIE-HW-e4S"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="qLc-81-jQe"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Weather App" id="Nl7-JD-67g"/>
                     <connections>
-                        <outlet property="searchBar" destination="0fi-OR-ZRc" id="kHI-hD-cky"/>
                         <outlet property="tableView" destination="vYA-p4-8eI" id="gAu-wV-f2q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ffF-b8-Bns" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="244" y="93"/>
+            <point key="canvasLocation" x="976.79999999999995" y="91.304347826086968"/>
+        </scene>
+        <!--Search CityVC-->
+        <scene sceneID="orJ-zE-khn">
+            <objects>
+                <viewController id="9Vp-Sj-WqG" customClass="SearchCityVC" customModule="Weather_App" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="WwI-DQ-sZi">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background2" translatesAutoresizingMaskIntoConstraints="NO" id="vAN-rT-mdH">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                            <searchBar contentMode="redraw" placeholder="search city" translatesAutoresizingMaskIntoConstraints="NO" id="GpM-bs-lsa">
+                                <rect key="frame" x="0.0" y="20" width="375" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="fr0-Eh-HAe"/>
+                                </constraints>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="UhU-lB-yyz" firstAttribute="bottom" secondItem="vAN-rT-mdH" secondAttribute="bottom" id="3pO-Vo-7OD"/>
+                            <constraint firstItem="GpM-bs-lsa" firstAttribute="top" secondItem="UhU-lB-yyz" secondAttribute="top" id="93G-CE-WyV"/>
+                            <constraint firstItem="vAN-rT-mdH" firstAttribute="top" secondItem="WwI-DQ-sZi" secondAttribute="top" id="NNN-V8-93z"/>
+                            <constraint firstItem="GpM-bs-lsa" firstAttribute="trailing" secondItem="UhU-lB-yyz" secondAttribute="trailing" id="Ztc-Uz-xQx"/>
+                            <constraint firstItem="UhU-lB-yyz" firstAttribute="trailing" secondItem="vAN-rT-mdH" secondAttribute="trailing" id="jmf-pC-b3s"/>
+                            <constraint firstItem="GpM-bs-lsa" firstAttribute="leading" secondItem="UhU-lB-yyz" secondAttribute="leading" id="k1c-yF-H9A"/>
+                            <constraint firstItem="vAN-rT-mdH" firstAttribute="leading" secondItem="UhU-lB-yyz" secondAttribute="leading" id="vB9-yX-Q3T"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="UhU-lB-yyz"/>
+                    </view>
+                    <connections>
+                        <outlet property="searchBar" destination="GpM-bs-lsa" id="ynd-bc-1wP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Km-lU-Dfy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1764" y="90.404797601199405"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="add" width="512" height="512"/>
+        <image name="background2" width="6000" height="4000"/>
+    </resources>
 </document>

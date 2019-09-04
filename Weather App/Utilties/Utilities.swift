@@ -19,6 +19,6 @@ let APP_ID = "d53a6641c9026a72811d14870db7768d"
 var weatherDataJSONArray = [JSON]()
 
 var cityDataArray = [String]()
-var tempDataArray = [String]()
-
-var weatherDataArray = [Weather]()
+var tempDataArrayCelcius = [Int]()
+var photoDataArray = [UIImage]()
+var statusDataArray = [String]()
