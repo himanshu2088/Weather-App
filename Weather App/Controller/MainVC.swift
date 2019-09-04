@@ -14,8 +14,7 @@ import SVProgressHUD
 
 class MainVC: UIViewController, CLLocationManagerDelegate, ChangeCityDelegate {
     
-    let realm = try! Realm()
-
+  
     //Outlets
     @IBOutlet weak var tableView: UITableView!
     
