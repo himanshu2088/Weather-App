@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		203A4FB9243DAA0A00196B76 /* CityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A4FB7243DAA0A00196B76 /* CityCell.swift */; };
+		203A4FBA243DAA0A00196B76 /* CityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 203A4FB8243DAA0A00196B76 /* CityCell.xib */; };
 		20B776A92313CE6A00D95ED6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B776A82313CE6A00D95ED6 /* AppDelegate.swift */; };
 		20B776AB2313CE6A00D95ED6 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B776AA2313CE6A00D95ED6 /* MainVC.swift */; };
 		20B776AE2313CE6A00D95ED6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20B776AC2313CE6A00D95ED6 /* Main.storyboard */; };
@@ -20,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		203A4FB7243DAA0A00196B76 /* CityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityCell.swift; sourceTree = "<group>"; };
+		203A4FB8243DAA0A00196B76 /* CityCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CityCell.xib; sourceTree = "<group>"; };
 		20B776A52313CE6A00D95ED6 /* Weather App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Weather App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		20B776A82313CE6A00D95ED6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		20B776AA2313CE6A00D95ED6 /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; tabWidth = 5; };
@@ -95,6 +99,8 @@
 			children = (
 				20B776C22313CFF600D95ED6 /* WeatherCell.swift */,
 				20B776C32313CFF600D95ED6 /* WeatherCell.xib */,
+				203A4FB7243DAA0A00196B76 /* CityCell.swift */,
+				203A4FB8243DAA0A00196B76 /* CityCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -185,6 +191,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				20B776C52313CFF600D95ED6 /* WeatherCell.xib in Resources */,
+				203A4FBA243DAA0A00196B76 /* CityCell.xib in Resources */,
 				20B776B62313CE6B00D95ED6 /* LaunchScreen.storyboard in Resources */,
 				20B776B32313CE6B00D95ED6 /* Assets.xcassets in Resources */,
 				20B776AE2313CE6A00D95ED6 /* Main.storyboard in Resources */,
@@ -243,6 +250,7 @@
 			files = (
 				20B776AB2313CE6A00D95ED6 /* MainVC.swift in Sources */,
 				20B776C42313CFF600D95ED6 /* WeatherCell.swift in Sources */,
+				203A4FB9243DAA0A00196B76 /* CityCell.swift in Sources */,
 				20E59D86231574D3003CBFB9 /* SearchCityVC.swift in Sources */,
 				20B776C12313CFCE00D95ED6 /* Utilities.swift in Sources */,
 				20B776A92313CE6A00D95ED6 /* AppDelegate.swift in Sources */,

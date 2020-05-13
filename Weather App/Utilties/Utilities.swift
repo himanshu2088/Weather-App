@@ -13,12 +13,13 @@ import Alamofire
 import SwiftyJSON
 
 //Variables
-let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
-let APP_ID = "d53a6641c9026a72811d14870db7768d"
 
-var weatherDataJSONArray = [JSON]()
+let AQI_URL = "http://api.airpollutionapi.com/1.0/aqi"
+let AQI_KEY = "jth8ci36qp6bfu0s4bn25fka94"
 
-var cityDataArray = [String]()
-var tempDataArrayCelcius = [Int]()
-var photoDataArray = [UIImage]()
-var statusDataArray = [String]()
+var aqiDataJSONArray = [JSON]()
+
+var cityNameArray = [String]()
+var tempArrayCelcius = [Int]()
+var descriptionArray = [String]()
+var aqiArray = [Int]()

@@ -10,6 +10,13 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>api.airpollutionapi.com</key>
+			<dict>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
 			<key>openweathermap.org</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>

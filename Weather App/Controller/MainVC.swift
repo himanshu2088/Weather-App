@@ -13,8 +13,8 @@ import Alamofire
 import SVProgressHUD
 
 class MainVC: UIViewController, CLLocationManagerDelegate, ChangeCityDelegate {
+//
     
-  
     //Outlets
     @IBOutlet weak var tableView: UITableView!
     
@@ -32,29 +32,24 @@ class MainVC: UIViewController, CLLocationManagerDelegate, ChangeCityDelegate {
         locationManager.startUpdatingLocation()
         tableView.reloadData()
         
-        let backgroundImage = UIImage(named: "background1")
-        let imageView = UIImageView(image: backgroundImage)
-        tableView.backgroundView = imageView
-        imageView.contentMode = .scaleAspectFill
-        
-        tableView.rowHeight = 100
+        tableView.rowHeight = 125
         
         tableView.register(UINib(nibName: "WeatherCell", bundle: nil), forCellReuseIdentifier: "weatherCell")
     }
     
-    func userEnteredANewCityName(city: String) {
-        let params : [String : String] = ["q" : city, "appid" : APP_ID]
-        getWeatherData(url: WEATHER_URL, parameters: params)
+    func userEnteredANewCityName(lat: Double, long: Double, city: String) {
+        let params : [String : Any] = ["lat" : lat, "lon" : long, "APPID" : AQI_KEY]
+        getAQIData(url: AQI_URL, parameters: params, city: city)
     }
     
-    func getWeatherData(url: String, parameters: [String: String]) {
+    func getAQIData(url: String, parameters: [String: Any], city: String) {
         
         Alamofire.request(url, method: .get, parameters: parameters).responseJSON {
             response in
             if response.result.isSuccess {
-                
-                let weatherJSON : JSON = JSON(response.result.value!)
-                let error = weatherJSON["cod"].intValue
+                let aqiJSON : JSON = JSON(response.result.value!)
+                let error = aqiJSON["cod"].intValue
+                print(aqiJSON)
                 
                 if error == 404 {
                     SVProgressHUD.dismiss()
@@ -63,9 +58,9 @@ class MainVC: UIViewController, CLLocationManagerDelegate, ChangeCityDelegate {
                     alert.addAction(action)
                     self.present(alert, animated: true, completion: nil)
                 } else {
-                    weatherDataJSONArray.append(weatherJSON)
+                    aqiDataJSONArray.append(aqiJSON)
                     self.tableView.reloadData()
-                    self.classifyData(json: weatherDataJSONArray)
+                    self.classifyData(json: aqiDataJSONArray, city: city)
                 }
             }
                 
@@ -75,19 +70,24 @@ class MainVC: UIViewController, CLLocationManagerDelegate, ChangeCityDelegate {
         }
     }
     
-    func classifyData(json: [JSON]) {
+    func classifyData(json: [JSON], city: String) {
         
-        weatherDataJSONArray.removeAll()
+        aqiDataJSONArray.removeAll()
         for data in json {
-            let temperature = data["main"]["temp"].intValue - 273
-            let city = data["name"].stringValue
-            let status = data["weather"][0]["main"].stringValue
-            cityDataArray.append(city)
-            tempDataArrayCelcius.append(temperature)
-            statusDataArray.append(status)
-            if let imageName = UIImage(named: status) {
-                photoDataArray.append(imageName)
+            let aqi = data["data"]["value"].intValue
+            let temp = data["data"]["temp"].intValue
+            let desc = data["data"]["text"].stringValue
+            
+            if cityNameArray.contains(city) {
+                break
             }
+            else {
+                cityNameArray.append(city)
+                aqiArray.append(aqi)
+                tempArrayCelcius.append(temp)
+                descriptionArray.append(desc)
+            }
+            
         }
         tableView.reloadData()
     }
@@ -101,9 +101,10 @@ class MainVC: UIViewController, CLLocationManagerDelegate, ChangeCityDelegate {
             let latitude = String(location.coordinate.latitude)
             let longitude = String(location.coordinate.longitude)
             
-            let params : [String : String] = ["lat" : latitude, "lon" : longitude, "appid" : APP_ID]
             
-            getWeatherData(url: WEATHER_URL, parameters: params)
+            let params2 : [String : Any] = ["lat" : latitude, "lon" : longitude, "APPID" : AQI_KEY]
+            
+            getAQIData(url: AQI_URL, parameters: params2, city: "Cupertino")
         }
     }
     
@@ -121,9 +122,10 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         SVProgressHUD.dismiss()
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell") as? WeatherCell else { return UITableViewCell() }
-        cell.cityLabel.text = cityDataArray[indexPath.row]
-        cell.statusLabel.text = statusDataArray[indexPath.row]
-        cell.tempLabel.text = "\(tempDataArrayCelcius[indexPath.row])"
+        cell.airQualityIndex.text = "Air Quality Index is " + "\(aqiArray[indexPath.row])"
+        cell.cityLabel.text = cityNameArray[indexPath.row]
+        cell.statusLabel.text = descriptionArray[indexPath.row]
+        cell.tempLabel.text = "\(tempArrayCelcius[indexPath.row])" + "℃"
         return cell
     }
     
@@ -132,12 +134,12 @@ extension MainVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cityDataArray.count
+        return cityNameArray.count
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            cityDataArray.remove(at: indexPath.row)
+            cityNameArray.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }

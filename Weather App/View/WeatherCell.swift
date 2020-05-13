@@ -13,7 +13,7 @@ class WeatherCell: UITableViewCell {
     //Outlets
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var tempLabel: UILabel!
-    @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var airQualityIndex: UILabel!
     
 }
